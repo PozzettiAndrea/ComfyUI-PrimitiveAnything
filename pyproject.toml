@@ -1,0 +1,45 @@
+[project]
+name = "comfyui-primitiveanything"
+description = "ComfyUI wrapper for PrimitiveAnything: decompose 3D shapes into primitive assemblies (cube, sphere, cylinder) using auto-regressive transformer."
+version = "0.0.1"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+
+dependencies = [
+    # Core dependencies
+    "trimesh>=4.0.0",
+    "numpy>=1.22.0",
+    "scipy>=1.7.0",
+    "seaborn>=0.12.0",
+    "pyyaml>=6.0",
+
+    # HuggingFace for model downloading
+    "huggingface-hub",
+    "accelerate>=0.20.0",
+
+    # 3D processing
+    "open3d>=0.17.0",
+    "scikit-image>=0.20.0",
+    "mesh2sdf",
+    "mesh-to-sdf",
+
+    # Note: Additional dependencies should be installed with PrimitiveAnything:
+    # - pytorch3d
+    # - x_transformers
+    # - gateloop_transformer
+]
+
+[project.urls]
+Repository = "https://github.com/PozzettiAndrea/ComfyUI-PrimitiveAnything"
+Documentation = "https://github.com/PozzettiAndrea/ComfyUI-PrimitiveAnything#readme"
+"Bug Tracker" = "https://github.com/PozzettiAndrea/ComfyUI-PrimitiveAnything/issues"
+
+# ComfyUI Registry configuration
+[tool.comfy]
+PublisherId = "pznodes"
+DisplayName = "PrimitiveAnything"
+Icon = ""
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"

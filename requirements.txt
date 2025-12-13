@@ -1,0 +1,24 @@
+# ComfyUI-PrimitiveAnything requirements
+# Note: These should already be installed if PrimitiveAnything is set up
+
+# Core dependencies
+trimesh>=4.0.0
+numpy>=1.22.0
+scipy>=1.7.0
+seaborn>=0.12.0
+pyyaml>=6.0
+
+# HuggingFace for model downloading
+huggingface_hub
+accelerate>=0.20.0
+
+# 3D processing
+open3d>=0.17.0
+scikit-image>=0.20.0
+mesh2sdf
+mesh-to-sdf
+
+# PrimitiveAnything specific (should be installed with PrimitiveAnything)
+# x_transformers
+# gateloop_transformer
+# pytorch3d
