@@ -1,0 +1,230 @@
+{
+  "id": "b640e087-4e51-4400-a363-35f409ad9998",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 2,
+      "type": "PrimitiveAnythingPreprocess",
+      "pos": [
+        154.66796875,
+        322.515625
+      ],
+      "size": [
+        294.478125,
+        106
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "TRIMESH",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "preprocessed",
+          "type": "PA_DATA",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "PozzettiAndrea/ComfyUI-PrimitiveAnything",
+        "ver": "9b0f83aa4cdd51dd9908453a08a00c90b84058cb",
+        "Node name for S&R": "PrimitiveAnythingPreprocess"
+      },
+      "widgets_values": [
+        true,
+        0.015,
+        10000
+      ]
+    },
+    {
+      "id": 1,
+      "type": "PrimitiveAnythingProcess",
+      "pos": [
+        594.3359375,
+        308.79296875
+      ],
+      "size": [
+        272.7056640625,
+        150
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "PA_MODEL",
+          "link": null
+        },
+        {
+          "name": "preprocessed",
+          "type": "PA_DATA",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mesh",
+          "type": "TRIMESH",
+          "links": [
+            3
+          ]
+        },
+        {
+          "name": "primitives_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "PozzettiAndrea/ComfyUI-PrimitiveAnything",
+        "ver": "9b0f83aa4cdd51dd9908453a08a00c90b84058cb",
+        "Node name for S&R": "PrimitiveAnythingProcess"
+      },
+      "widgets_values": [
+        0,
+        "recon_loss",
+        0,
+        "randomize"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "GeomPackLoadMesh",
+      "pos": [
+        -206.05078125,
+        354.05859375
+      ],
+      "size": [
+        270,
+        78
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "mesh",
+          "type": "TRIMESH",
+          "links": [
+            2,
+            4
+          ]
+        },
+        {
+          "name": "texture",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-geometrypack",
+        "ver": "d19c31ebf956a107b3b543e9e686f438e8cf9cd2",
+        "Node name for S&R": "GeomPackLoadMesh"
+      },
+      "widgets_values": [
+        "3d/Stanford_Bunny.stl"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "GeomPackPreviewMeshDual",
+      "pos": [
+        882.25390625,
+        591.12109375
+      ],
+      "size": [
+        768,
+        826
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mesh_1",
+          "type": "TRIMESH",
+          "link": 3
+        },
+        {
+          "name": "mesh_2",
+          "type": "TRIMESH",
+          "link": 4
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfyui-geometrypack",
+        "ver": "d19c31ebf956a107b3b543e9e686f438e8cf9cd2",
+        "Node name for S&R": "GeomPackPreviewMeshDual"
+      },
+      "widgets_values": [
+        "side_by_side",
+        "fields",
+        1,
+        1,
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      1,
+      1,
+      "PA_DATA"
+    ],
+    [
+      2,
+      3,
+      0,
+      2,
+      0,
+      "TRIMESH"
+    ],
+    [
+      3,
+      1,
+      0,
+      4,
+      0,
+      "TRIMESH"
+    ],
+    [
+      4,
+      3,
+      0,
+      4,
+      1,
+      "TRIMESH"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "workflowRendererVersion": "LG",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        315.70703125,
+        0.12109375
+      ]
+    },
+    "frontendVersion": "1.34.8"
+  },
+  "version": 0.4
+}

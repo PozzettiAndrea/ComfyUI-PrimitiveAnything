@@ -1,5 +1,4 @@
 # ComfyUI-PrimitiveAnything requirements
-# Note: These should already be installed if PrimitiveAnything is set up
 
 # Core dependencies
 trimesh>=4.0.0
@@ -18,7 +17,15 @@ scikit-image>=0.20.0
 mesh2sdf
 mesh-to-sdf
 
-# PrimitiveAnything specific (should be installed with PrimitiveAnything)
-# x_transformers
-# gateloop_transformer
-# pytorch3d
+# PrimitiveAnything model dependencies
+beartype
+einops
+gateloop_transformer
+pytorch_custom_utils
+x_transformers
+toolz
+environs
+jaxtyping
+omegaconf
+transformers
+pytorch_lightning

@@ -131,25 +131,28 @@ class DownloadAndLoadPrimitiveAnythingModel:
 
     @classmethod
     def _get_or_download_checkpoint(cls) -> Path:
-        """Get checkpoint path, downloading if necessary."""
-        models_dir = get_primitive_anything_models_path()
-        ckpt_path = models_dir / "mesh-transformer.ckpt.60.pt"
-
-        # Also check in PrimitiveAnything/ckpt
+        """Get checkpoint path, downloading all dependencies if necessary."""
         pa_path = get_primitive_anything_path()
-        pa_ckpt = pa_path / "ckpt" / "mesh-transformer.ckpt.60.pt"
+        ckpt_dir = pa_path / "ckpt"
+        ckpt_path = ckpt_dir / "mesh-transformer.ckpt.60.pt"
 
-        if pa_ckpt.exists():
-            print(f"[PrimitiveAnything] Found checkpoint in source: {pa_ckpt}")
-            return pa_ckpt
+        # Download main checkpoint if needed
+        if not ckpt_path.exists():
+            print(f"[PrimitiveAnything] Downloading checkpoint from HuggingFace...")
+            cls._download_main_checkpoint(ckpt_dir)
 
-        if ckpt_path.exists():
-            print(f"[PrimitiveAnything] Found checkpoint: {ckpt_path}")
-            return ckpt_path
+        # Download Michelangelo encoder if needed
+        encoder_path = ckpt_dir / "shapevae-256.ckpt"
+        if not encoder_path.exists():
+            print(f"[PrimitiveAnything] Downloading Michelangelo encoder...")
+            cls._download_michelangelo_encoder(ckpt_dir)
 
-        # Download from HuggingFace
-        print(f"[PrimitiveAnything] Downloading checkpoint from HuggingFace...")
-        cls._download_checkpoint(models_dir)
+        # Download basic shapes if needed
+        data_dir = pa_path / "data"
+        shapes_dir = data_dir / "basic_shapes_norm"
+        if not shapes_dir.exists() or not any(shapes_dir.glob("*.ply")):
+            print(f"[PrimitiveAnything] Downloading basic shapes...")
+            cls._download_basic_shapes(data_dir)
 
         if not ckpt_path.exists():
             raise RuntimeError(f"Download completed but checkpoint not found: {ckpt_path}")
@@ -157,34 +160,97 @@ class DownloadAndLoadPrimitiveAnythingModel:
         return ckpt_path
 
     @classmethod
-    def _download_checkpoint(cls, target_dir: Path):
-        """Download checkpoint from HuggingFace."""
+    def _download_main_checkpoint(cls, target_dir: Path):
+        """Download main transformer checkpoint from HuggingFace."""
         target_dir.mkdir(parents=True, exist_ok=True)
 
         try:
             from huggingface_hub import hf_hub_download
 
             repo_id = "hyz317/PrimitiveAnything"
-
             print(f"[PrimitiveAnything] Downloading from {repo_id}...")
 
-            # Download main checkpoint
             hf_hub_download(
                 repo_id=repo_id,
                 filename="mesh-transformer.ckpt.60.pt",
                 local_dir=str(target_dir),
                 local_dir_use_symlinks=False,
             )
-
-            print(f"[PrimitiveAnything] Download complete")
+            print(f"[PrimitiveAnything] Main checkpoint download complete")
 
         except ImportError:
             raise ImportError(
-                "huggingface_hub is required for downloading checkpoints. "
+                "huggingface_hub is required for downloading. "
                 "Please install it: pip install huggingface-hub"
             )
         except Exception as e:
-            raise RuntimeError(f"Download failed: {e}") from e
+            raise RuntimeError(f"Main checkpoint download failed: {e}") from e
+
+    @classmethod
+    def _download_michelangelo_encoder(cls, target_dir: Path):
+        """Download Michelangelo ShapeVAE encoder from HuggingFace."""
+        target_dir.mkdir(parents=True, exist_ok=True)
+
+        try:
+            from huggingface_hub import hf_hub_download
+
+            repo_id = "Maikou/Michelangelo"
+            print(f"[PrimitiveAnything] Downloading encoder from {repo_id}...")
+
+            # Download to temp location then move to target
+            downloaded = hf_hub_download(
+                repo_id=repo_id,
+                filename="checkpoints/aligned_shape_latents/shapevae-256.ckpt",
+                local_dir=str(target_dir),
+                local_dir_use_symlinks=False,
+            )
+
+            # Move from nested path to ckpt dir
+            import shutil
+            nested_path = target_dir / "checkpoints" / "aligned_shape_latents" / "shapevae-256.ckpt"
+            if nested_path.exists():
+                shutil.move(str(nested_path), str(target_dir / "shapevae-256.ckpt"))
+                # Clean up nested dirs
+                shutil.rmtree(str(target_dir / "checkpoints"), ignore_errors=True)
+
+            print(f"[PrimitiveAnything] Michelangelo encoder download complete")
+
+        except Exception as e:
+            print(f"[PrimitiveAnything] WARNING: Michelangelo encoder download failed: {e}")
+            print(f"[PrimitiveAnything] The model may still work without it.")
+
+    @classmethod
+    def _download_basic_shapes(cls, target_dir: Path):
+        """Download basic primitive shapes from HuggingFace datasets."""
+        target_dir.mkdir(parents=True, exist_ok=True)
+
+        try:
+            from huggingface_hub import hf_hub_download
+
+            repo_id = "hyz317/PrimitiveAnything"
+            files_to_download = [
+                "basic_shapes_norm/SM_GR_BS_CubeBevel_001.ply",
+                "basic_shapes_norm/SM_GR_BS_CylinderSharp_001.ply",
+                "basic_shapes_norm/SM_GR_BS_SphereSharp_001.ply",
+                "basic_shapes_norm/basic_shapes.json",
+            ]
+
+            print(f"[PrimitiveAnything] Downloading basic shapes from {repo_id} (dataset)...")
+
+            for filename in files_to_download:
+                hf_hub_download(
+                    repo_id=repo_id,
+                    filename=filename,
+                    repo_type="dataset",
+                    local_dir=str(target_dir),
+                    local_dir_use_symlinks=False,
+                )
+                print(f"[PrimitiveAnything]   Downloaded: {filename}")
+
+            print(f"[PrimitiveAnything] Basic shapes download complete")
+
+        except Exception as e:
+            raise RuntimeError(f"Basic shapes download failed: {e}") from e
 
 
 NODE_CLASS_MAPPINGS = {

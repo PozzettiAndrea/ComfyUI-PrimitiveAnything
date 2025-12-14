@@ -1,5 +1,7 @@
 """PrimitiveAnythingPreprocess node for preparing meshes."""
 
+import os
+import sys
 import time
 import torch
 import numpy as np
@@ -8,6 +10,39 @@ import skimage.measure
 from typing import Any, Dict
 
 from .utils import normalize_mesh_for_pa, setup_primitive_anything_imports
+
+
+def _setup_opengl_platform():
+    """Auto-detect and configure OpenGL platform for headless rendering."""
+    # Already configured - respect user's choice
+    if 'PYOPENGL_PLATFORM' in os.environ:
+        return
+
+    # Not Linux - use default (works on Windows/Mac with display)
+    if sys.platform != 'linux':
+        return
+
+    # Linux with display - use default Pyglet
+    if os.environ.get('DISPLAY'):
+        return
+
+    # Headless Linux - try EGL first (GPU), then OSMesa (software)
+    for platform in ['egl', 'osmesa']:
+        os.environ['PYOPENGL_PLATFORM'] = platform
+        try:
+            import OpenGL.GL  # noqa - test if platform works
+            print(f"[PrimitiveAnything] Using OpenGL platform: {platform}")
+            return
+        except Exception:
+            pass
+
+    # Clear if nothing worked - will fall back to trimesh sampling
+    os.environ.pop('PYOPENGL_PLATFORM', None)
+    print("[PrimitiveAnything] Warning: No OpenGL platform available, will use trimesh fallback")
+
+
+# Configure OpenGL platform before any rendering imports
+_setup_opengl_platform()
 
 
 class PrimitiveAnythingPreprocess:
