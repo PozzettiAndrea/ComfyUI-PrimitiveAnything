@@ -16,8 +16,8 @@ _MODEL_CACHE: Dict[str, Any] = {}
 
 
 def get_primitive_anything_path() -> Path:
-    """Get the path to the PrimitiveAnything source code."""
-    return Path(__file__).parent.parent.parent / "PrimitiveAnything"
+    """Get the path to the PrimitiveAnything source code (vendored)."""
+    return Path(__file__).parent.parent
 
 
 def get_primitive_anything_models_path() -> Path:

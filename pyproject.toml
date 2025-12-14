@@ -22,6 +22,7 @@ dependencies = [
     "scikit-image>=0.20.0",
     "mesh2sdf",
     "mesh-to-sdf",
+    "opencv-python>=4.5.0",
 
     # Note: Additional dependencies should be installed with PrimitiveAnything:
     # - pytorch3d

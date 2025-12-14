@@ -3,10 +3,46 @@
 
 """
 PrimitiveAnything PreStartup Script
-Copies example 3D assets to ComfyUI input folder on startup.
+- Auto-installs pytorch3d from miropsota wheels
+- Copies example 3D assets to ComfyUI input folder on startup.
 """
 import os
 import shutil
+import subprocess
+import sys
+
+
+def ensure_pytorch3d():
+    """Auto-install pytorch3d if missing."""
+    try:
+        import pytorch3d
+        return
+    except ImportError:
+        pass
+
+    try:
+        import torch
+    except ImportError:
+        return
+
+    torch_ver = torch.__version__.split('+')[0]
+    cuda_ver = torch.version.cuda
+
+    if cuda_ver:
+        pkg = f"pytorch3d==0.7.9+pt{torch_ver}cu{cuda_ver.replace('.', '')}"
+    else:
+        pkg = f"pytorch3d==0.7.9+pt{torch_ver}cpu"
+
+    print(f"[PrimitiveAnything] Auto-installing {pkg}...")
+    try:
+        subprocess.check_call([
+            sys.executable, "-m", "pip", "install", "-q",
+            "--extra-index-url", "https://miropsota.github.io/torch_packages_builder",
+            pkg
+        ])
+        print("[PrimitiveAnything] pytorch3d installed")
+    except Exception as e:
+        print(f"[PrimitiveAnything] Failed to install pytorch3d: {e}")
 
 
 def copy_example_assets():
@@ -60,4 +96,5 @@ def copy_example_assets():
 
 
 # Run on import
+ensure_pytorch3d()
 copy_example_assets()

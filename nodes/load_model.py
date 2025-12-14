@@ -85,7 +85,8 @@ class DownloadAndLoadPrimitiveAnythingModel:
 
         # Load checkpoint
         print(f"[PrimitiveAnything] Loading checkpoint from {ckpt_path}")
-        checkpoint = torch.load(ckpt_path, map_location='cpu')
+        from primitive_anything.utils import safe_torch_load
+        checkpoint = safe_torch_load(ckpt_path, map_location='cpu')
         transformer.load_state_dict(checkpoint)
 
         # Prepare with accelerator for fp16
@@ -100,8 +101,9 @@ class DownloadAndLoadPrimitiveAnythingModel:
         if hasattr(transformer, 'rotation_matrix_align_coord'):
             transformer.rotation_matrix_align_coord = transformer.rotation_matrix_align_coord.to(device)
 
-        # Load basic shapes for rendering
-        bs_dir = pa_path / "data" / "basic_shapes_norm"
+        # Load basic shapes for rendering (from ComfyUI models directory)
+        models_dir = get_primitive_anything_models_path()
+        bs_dir = models_dir / "basic_shapes_norm"
         mesh_bs = {}
         if bs_dir.exists():
             for bs_path in glob.glob(str(bs_dir / "*.ply")):
@@ -132,27 +134,26 @@ class DownloadAndLoadPrimitiveAnythingModel:
     @classmethod
     def _get_or_download_checkpoint(cls) -> Path:
         """Get checkpoint path, downloading all dependencies if necessary."""
-        pa_path = get_primitive_anything_path()
-        ckpt_dir = pa_path / "ckpt"
-        ckpt_path = ckpt_dir / "mesh-transformer.ckpt.60.pt"
+        # Use ComfyUI models directory for all checkpoints
+        models_dir = get_primitive_anything_models_path()
+        ckpt_path = models_dir / "mesh-transformer.ckpt.60.pt"
 
         # Download main checkpoint if needed
         if not ckpt_path.exists():
             print(f"[PrimitiveAnything] Downloading checkpoint from HuggingFace...")
-            cls._download_main_checkpoint(ckpt_dir)
+            cls._download_main_checkpoint(models_dir)
 
         # Download Michelangelo encoder if needed
-        encoder_path = ckpt_dir / "shapevae-256.ckpt"
+        encoder_path = models_dir / "shapevae-256.ckpt"
         if not encoder_path.exists():
             print(f"[PrimitiveAnything] Downloading Michelangelo encoder...")
-            cls._download_michelangelo_encoder(ckpt_dir)
+            cls._download_michelangelo_encoder(models_dir)
 
         # Download basic shapes if needed
-        data_dir = pa_path / "data"
-        shapes_dir = data_dir / "basic_shapes_norm"
+        shapes_dir = models_dir / "basic_shapes_norm"
         if not shapes_dir.exists() or not any(shapes_dir.glob("*.ply")):
             print(f"[PrimitiveAnything] Downloading basic shapes...")
-            cls._download_basic_shapes(data_dir)
+            cls._download_basic_shapes(models_dir)
 
         if not ckpt_path.exists():
             raise RuntimeError(f"Download completed but checkpoint not found: {ckpt_path}")
