@@ -81,6 +81,9 @@ class DownloadAndLoadPrimitiveAnythingModel:
         print(f"[PrimitiveAnything] Creating model...")
         model_cfg = config['model'].copy()
         model_cfg.pop('name', None)
+        # Override bs_pc_dir with correct absolute path (for Chamfer distance calculation)
+        models_dir = get_primitive_anything_models_path()
+        model_cfg['bs_pc_dir'] = str(models_dir / "basic_shapes_norm_pc10000")
         transformer = PrimitiveTransformerDiscrete(**model_cfg)
 
         # Load checkpoint
@@ -102,7 +105,6 @@ class DownloadAndLoadPrimitiveAnythingModel:
             transformer.rotation_matrix_align_coord = transformer.rotation_matrix_align_coord.to(device)
 
         # Load basic shapes for rendering (from ComfyUI models directory)
-        models_dir = get_primitive_anything_models_path()
         bs_dir = models_dir / "basic_shapes_norm"
         mesh_bs = {}
         if bs_dir.exists():
@@ -149,9 +151,11 @@ class DownloadAndLoadPrimitiveAnythingModel:
             print(f"[PrimitiveAnything] Downloading Michelangelo encoder...")
             cls._download_michelangelo_encoder(models_dir)
 
-        # Download basic shapes if needed
+        # Download basic shapes if needed (both mesh and point cloud versions)
         shapes_dir = models_dir / "basic_shapes_norm"
-        if not shapes_dir.exists() or not any(shapes_dir.glob("*.ply")):
+        pc10000_dir = models_dir / "basic_shapes_norm_pc10000"
+        if not shapes_dir.exists() or not any(shapes_dir.glob("*.ply")) or \
+           not pc10000_dir.exists() or not any(pc10000_dir.glob("*.ply")):
             print(f"[PrimitiveAnything] Downloading basic shapes...")
             cls._download_basic_shapes(models_dir)
 
@@ -230,10 +234,15 @@ class DownloadAndLoadPrimitiveAnythingModel:
 
             repo_id = "hyz317/PrimitiveAnything"
             files_to_download = [
+                # Mesh files for rendering
                 "basic_shapes_norm/SM_GR_BS_CubeBevel_001.ply",
                 "basic_shapes_norm/SM_GR_BS_CylinderSharp_001.ply",
                 "basic_shapes_norm/SM_GR_BS_SphereSharp_001.ply",
                 "basic_shapes_norm/basic_shapes.json",
+                # Point cloud files (10000 points each) for Chamfer distance calculation
+                "basic_shapes_norm_pc10000/SM_GR_BS_CubeBevel_001.ply",
+                "basic_shapes_norm_pc10000/SM_GR_BS_CylinderSharp_001.ply",
+                "basic_shapes_norm_pc10000/SM_GR_BS_SphereSharp_001.ply",
             ]
 
             print(f"[PrimitiveAnything] Downloading basic shapes from {repo_id} (dataset)...")
