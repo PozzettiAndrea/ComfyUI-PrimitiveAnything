@@ -130,10 +130,10 @@ class PrimitiveAnythingPreprocess:
             vertices = normalized_mesh.vertices
             bounds = np.array([vertices.min(axis=0), vertices.max(axis=0)])
             center = (bounds[0] + bounds[1]) / 2
-            scale = (bounds[1] - bounds[0]).max() / 1.6
+            max_extent = (bounds[1] - bounds[0]).max()
 
-            normalized_mesh.vertices = (vertices - center) / scale * 1.6
-            pc_normal[:, :3] = (pc_normal[:, :3] - center) / scale * 1.6
+            normalized_mesh.vertices = (vertices - center) / max_extent * 1.6
+            pc_normal[:, :3] = (pc_normal[:, :3] - center) / max_extent * 1.6
 
         # Verify normals are unit vectors
         normals = pc_normal[:, 3:]

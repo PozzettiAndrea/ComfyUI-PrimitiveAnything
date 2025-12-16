@@ -61,6 +61,32 @@ def normalize_mesh_for_pa(mesh: trimesh.Trimesh) -> trimesh.Trimesh:
     return mesh
 
 
+def denormalize_mesh_from_pa(
+    mesh: trimesh.Trimesh,
+    center: np.ndarray,
+    max_extent: float,
+    scale_factor: float = 1.6
+) -> trimesh.Trimesh:
+    """
+    Denormalize mesh from PrimitiveAnything normalized space back to original scale.
+
+    Reverse of normalize_mesh_for_pa transformation.
+    Formula: original = (normalized / scale_factor) * max_extent + center
+
+    Args:
+        mesh: Mesh in normalized space [-1.6, 1.6]
+        center: Original mesh center (3,)
+        max_extent: Original mesh max extent
+        scale_factor: Normalization factor (default 1.6)
+
+    Returns:
+        Mesh in original scale/position (copy)
+    """
+    mesh = mesh.copy()
+    mesh.vertices = (mesh.vertices / scale_factor) * max_extent + center
+    return mesh
+
+
 def tensors_to_trimesh(
     vertices: torch.Tensor,
     faces: torch.Tensor,

@@ -1,76 +1,66 @@
 {
   "id": "b640e087-4e51-4400-a363-35f409ad9998",
   "revision": 0,
-  "last_node_id": 4,
-  "last_link_id": 4,
+  "last_node_id": 7,
+  "last_link_id": 9,
   "nodes": [
     {
-      "id": 2,
-      "type": "PrimitiveAnythingPreprocess",
+      "id": 5,
+      "type": "DownloadAndLoadPrimitiveAnythingModel",
       "pos": [
-        154.66796875,
-        322.515625
+        -67.99016406250001,
+        102.60067968749999
       ],
       "size": [
-        294.478125,
-        106
+        345.5630859375,
+        58
       ],
       "flags": {},
-      "order": 1,
+      "order": 0,
       "mode": 0,
-      "inputs": [
-        {
-          "name": "mesh",
-          "type": "TRIMESH",
-          "link": 2
-        }
-      ],
+      "inputs": [],
       "outputs": [
         {
-          "name": "preprocessed",
-          "type": "PA_DATA",
+          "name": "model",
+          "type": "PA_MODEL",
           "links": [
-            1
+            8
           ]
         }
       ],
       "properties": {
         "aux_id": "PozzettiAndrea/ComfyUI-PrimitiveAnything",
-        "ver": "9b0f83aa4cdd51dd9908453a08a00c90b84058cb",
-        "Node name for S&R": "PrimitiveAnythingPreprocess"
+        "ver": "35bc757682c00adb9dd6c7d4f1522b8b3ab90975",
+        "Node name for S&R": "DownloadAndLoadPrimitiveAnythingModel"
       },
       "widgets_values": [
-        true,
-        0.015,
-        10000
+        "PrimitiveAnything"
       ]
     },
     {
-      "id": 1,
-      "type": "PrimitiveAnythingProcess",
+      "id": 7,
+      "type": "PrimitiveAnything",
       "pos": [
-        594.3359375,
-        308.79296875
+        596.2620234374999,
+        206.8138203125
       ],
       "size": [
-        272.7056640625,
-        150
+        270,
+        246
       ],
-      "flags": {
-        "collapsed": false
-      },
+      "flags": {},
       "order": 2,
       "mode": 0,
       "inputs": [
         {
-          "name": "model",
-          "type": "PA_MODEL",
-          "link": null
+          "name": "mesh",
+          "type": "TRIMESH",
+          "link": 7
         },
         {
-          "name": "preprocessed",
-          "type": "PA_DATA",
-          "link": 1
+          "name": "model",
+          "type": "PA_MODEL",
+          "link": 8
         }
       ],
       "outputs": [
@@ -78,7 +68,7 @@
           "name": "mesh",
           "type": "TRIMESH",
           "links": [
-            3
+            9
           ]
         },
         {
@@ -89,14 +79,18 @@
       ],
       "properties": {
         "aux_id": "PozzettiAndrea/ComfyUI-PrimitiveAnything",
-        "ver": "9b0f83aa4cdd51dd9908453a08a00c90b84058cb",
-        "Node name for S&R": "PrimitiveAnythingProcess"
+        "ver": "9303f3ee72fb1e61ad10bcb85bcdeed2fb0256a4",
+        "Node name for S&R": "PrimitiveAnything"
       },
       "widgets_values": [
+        true,
+        0.015,
+        30000,
         0,
         "recon_loss",
-        0,
-        "randomize"
+        1,
+        "fixed",
+        true
       ]
     },
     {
@@ -111,7 +105,7 @@
         78
       ],
       "flags": {},
-      "order": 0,
+      "order": 1,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -119,8 +113,8 @@
           "name": "mesh",
           "type": "TRIMESH",
           "links": [
-            2,
-            4
+            4,
+            7
           ]
         },
         {
@@ -135,19 +129,19 @@
         "Node name for S&R": "GeomPackLoadMesh"
       },
       "widgets_values": [
-        "3d/Stanford_Bunny.stl"
+        "3d/fandisk.obj"
       ]
     },
     {
       "id": 4,
       "type": "GeomPackPreviewMeshDual",
       "pos": [
-        882.25390625,
-        591.12109375
+        937.3755433069679,
+        356.87645377312816
       ],
       "size": [
         768,
-        826
+        834
       ],
       "flags": {},
       "order": 3,
@@ -156,7 +150,7 @@
         {
           "name": "mesh_1",
           "type": "TRIMESH",
-          "link": 3
+          "link": 9
         },
         {
           "name": "mesh_2",
@@ -172,7 +166,7 @@
       },
       "widgets_values": [
         "side_by_side",
-        "fields",
+        "texture",
         1,
         1,
         ""
@@ -181,50 +175,50 @@
   ],
   "links": [
     [
-      1,
-      2,
-      0,
-      1,
-      1,
-      "PA_DATA"
-    ],
-    [
-      2,
+      4,
       3,
       0,
-      2,
+      4,
+      1,
+      "TRIMESH"
+    ],
+    [
+      7,
+      3,
+      0,
+      7,
       0,
       "TRIMESH"
     ],
     [
-      3,
+      8,
+      5,
+      0,
+      7,
       1,
-      0,
-      4,
-      0,
-      "TRIMESH"
+      "PA_MODEL"
     ],
     [
-      4,
-      3,
+      9,
+      7,
       0,
       4,
-      1,
+      0,
       "TRIMESH"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
-    "workflowRendererVersion": "LG",
     "ds": {
-      "scale": 1,
+      "scale": 0.7438804150105831,
       "offset": [
-        315.70703125,
-        0.12109375
+        206.6959263020732,
+        -111.19026503757192
       ]
     },
-    "frontendVersion": "1.34.8"
+    "frontendVersion": "1.34.9",
+    "workflowRendererVersion": "LG"
   },
   "version": 0.4
 }
