@@ -2,6 +2,9 @@
 
 ComfyUI wrapper for [PrimitiveAnything](https://github.com/hyz317/PrimitiveAnything) - decompose 3D meshes into primitive assemblies (cubes, spheres, cylinders) using an auto-regressive transformer.
 
+https://github.com/user-attachments/assets/d832916f-3ab4-4750-8f35-16152158c235
+
+
 ## Installation
 
 Install via ComfyUI-Manager or clone to `custom_nodes/`:
@@ -16,7 +19,6 @@ pytorch3d is installed automatically on first run via `install.py`.
 ## Nodes
 
 - **PrimitiveAnything** - Main node for primitive decomposition
-- **PreviewMeshDual** (from ComfyUI-GeometryPack) - Compare input/output meshes
 
 ## Usage
 
