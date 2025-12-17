@@ -2,6 +2,8 @@
 
 ComfyUI wrapper for [PrimitiveAnything](https://github.com/hyz317/PrimitiveAnything) - decompose 3D meshes into primitive assemblies (cubes, spheres, cylinders) using an auto-regressive transformer.
 
+![bun](docs/bun.png)
+
 https://github.com/user-attachments/assets/d832916f-3ab4-4750-8f35-16152158c235
 
 
