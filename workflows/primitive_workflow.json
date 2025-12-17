@@ -2,47 +2,14 @@
   "id": "b640e087-4e51-4400-a363-35f409ad9998",
   "revision": 0,
   "last_node_id": 7,
-  "last_link_id": 9,
+  "last_link_id": 11,
   "nodes": [
-    {
-      "id": 5,
-      "type": "DownloadAndLoadPrimitiveAnythingModel",
-      "pos": [
-        -67.99016406250001,
-        102.60067968749999
-      ],
-      "size": [
-        345.5630859375,
-        58
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "model",
-          "type": "PA_MODEL",
-          "links": [
-            8
-          ]
-        }
-      ],
-      "properties": {
-        "aux_id": "PozzettiAndrea/ComfyUI-PrimitiveAnything",
-        "ver": "35bc757682c00adb9dd6c7d4f1522b8b3ab90975",
-        "Node name for S&R": "DownloadAndLoadPrimitiveAnythingModel"
-      },
-      "widgets_values": [
-        "PrimitiveAnything"
-      ]
-    },
     {
       "id": 7,
       "type": "PrimitiveAnything",
       "pos": [
-        596.2620234374999,
-        206.8138203125
+        380.74697468190055,
+        147.63111328125
       ],
       "size": [
         270,
@@ -68,7 +35,7 @@
           "name": "mesh",
           "type": "TRIMESH",
           "links": [
-            9
+            10
           ]
         },
         {
@@ -97,15 +64,15 @@
       "id": 3,
       "type": "GeomPackLoadMesh",
       "pos": [
-        -206.05078125,
-        354.05859375
+        29.879367187499913,
+        309.79244531250015
       ],
       "size": [
         270,
         78
       ],
       "flags": {},
-      "order": 1,
+      "order": 0,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -113,8 +80,8 @@
           "name": "mesh",
           "type": "TRIMESH",
           "links": [
-            4,
-            7
+            7,
+            11
           ]
         },
         {
@@ -129,15 +96,48 @@
         "Node name for S&R": "GeomPackLoadMesh"
       },
       "widgets_values": [
-        "3d/fandisk.obj"
+        "3d/bunny.glb"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "DownloadAndLoadPrimitiveAnythingModel",
+      "pos": [
+        -27.66502343750002,
+        153.58421875000005
+      ],
+      "size": [
+        345.5630859375,
+        58
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "PA_MODEL",
+          "links": [
+            8
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "PozzettiAndrea/ComfyUI-PrimitiveAnything",
+        "ver": "35bc757682c00adb9dd6c7d4f1522b8b3ab90975",
+        "Node name for S&R": "DownloadAndLoadPrimitiveAnythingModel"
+      },
+      "widgets_values": [
+        "PrimitiveAnything"
       ]
     },
     {
       "id": 4,
       "type": "GeomPackPreviewMeshDual",
       "pos": [
-        937.3755433069679,
-        356.87645377312816
+        682.1454839667539,
+        146.49682938405712
       ],
       "size": [
         768,
@@ -150,12 +150,12 @@
         {
           "name": "mesh_1",
           "type": "TRIMESH",
-          "link": 9
+          "link": 11
         },
         {
           "name": "mesh_2",
           "type": "TRIMESH",
-          "link": 4
+          "link": 10
         }
       ],
       "outputs": [],
@@ -165,7 +165,7 @@
         "Node name for S&R": "GeomPackPreviewMeshDual"
       },
       "widgets_values": [
-        "side_by_side",
+        "slider",
         "texture",
         1,
         1,
@@ -174,14 +174,6 @@
     }
   ],
   "links": [
-    [
-      4,
-      3,
-      0,
-      4,
-      1,
-      "TRIMESH"
-    ],
     [
       7,
       3,
@@ -199,8 +191,16 @@
       "PA_MODEL"
     ],
     [
-      9,
+      10,
       7,
+      0,
+      4,
+      1,
+      "TRIMESH"
+    ],
+    [
+      11,
+      3,
       0,
       4,
       0,
@@ -211,10 +211,10 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.7438804150105831,
+      "scale": 0.7513148009015781,
       "offset": [
-        206.6959263020732,
-        -111.19026503757192
+        476.562945254527,
+        112.18470645677895
       ]
     },
     "frontendVersion": "1.34.9",

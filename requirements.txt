@@ -10,6 +10,7 @@ pyyaml>=6.0
 # HuggingFace for model downloading
 huggingface_hub
 accelerate>=0.20.0
+transformers
 
 # 3D processing
 open3d>=0.17.0
