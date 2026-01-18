@@ -5,40 +5,7 @@ version = "0.0.1"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 
-dependencies = [
-    # Core dependencies
-    "trimesh>=4.0.0",
-    "numpy>=1.22.0",
-    "scipy>=1.7.0",
-    "seaborn>=0.12.0",
-    "pyyaml>=6.0",
-
-    # HuggingFace for model downloading
-    "huggingface_hub",
-    "accelerate>=0.20.0",
-    "transformers",
-
-    # 3D processing
-    "open3d>=0.17.0",
-    "scikit-image>=0.20.0",
-    "mesh2sdf",
-    "mesh-to-sdf",
-    "opencv-python>=4.5.0",
-
-    # PrimitiveAnything model dependencies
-    "beartype",
-    "einops",
-    "gateloop_transformer",
-    "pytorch_custom_utils",
-    "x_transformers",
-    "toolz",
-    "environs",
-    "jaxtyping",
-    "omegaconf",
-    "pytorch_lightning",
-
-    # Note: pytorch3d is installed separately via install.py
-]
+dynamic = ["dependencies"]
 
 [project.urls]
 Repository = "https://github.com/PozzettiAndrea/ComfyUI-PrimitiveAnything"
@@ -54,3 +21,6 @@ Icon = ""
 [build-system]
 requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
